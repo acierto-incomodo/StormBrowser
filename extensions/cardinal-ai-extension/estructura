@@ -1,0 +1,6 @@
+StormBrowser/
+ └─ extensions/
+     └─ cardinal-ai-web/
+         ├─ manifest.json
+         ├─ new-tab.html
+         └─ icon.png

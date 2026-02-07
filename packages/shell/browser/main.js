@@ -1,11 +1,13 @@
-const path = require('path');
-const { promises: fs } = require('fs');
-const { app, session, BrowserWindow, globalShortcut } = require('electron');
-const log = require('electron-log');
-const { Tabs } = require('./tabs');
-const { ElectronChromeExtensions } = require('electron-chrome-extensions');
-const { setupMenu } = require('./menu');
-const { buildChromeContextMenu } = require('electron-chrome-context-menu');
+const path = require('path')
+const { promises: fs } = require('fs')
+const { app, session, BrowserWindow, globalShortcut } = require('electron')
+const log = require('electron-log')
+const { Tabs } = require('./tabs')
+const { ElectronChromeExtensions } = require('electron-chrome-extensions')
+const { setupMenu } = require('./menu')
+const { buildChromeContextMenu } = require('electron-chrome-context-menu')
+
+const { autoUpdater } = require('electron-updater')
 
 let webuiExtensionId
 
@@ -46,17 +48,17 @@ async function loadExtensions(session, extensionsPath) {
         if (await manifestExists(versionDirPath)) {
           return versionDirPath
         }
-      })
+      }),
   )
 
   const results = []
 
   for (const extPath of extensionDirectories.filter(Boolean)) {
-    console.log(`Loading extension from ${extPath}`);
+    console.log(`Loading extension from ${extPath}`)
     try {
       const extensionInfo = await session.loadExtension(extPath)
       results.push(extensionInfo)
-      console.log(`[OK]`);
+      console.log(`[OK]`)
     } catch (e) {
       console.error(e)
     }
@@ -129,7 +131,7 @@ class Browser {
 
   constructor() {
     app.whenReady().then(this.init.bind(this))
-    console.log(`\nElectron Shell Browser is up!\n`);
+    console.log(`\nElectron Shell Browser is up!\n`)
 
     app.on('window-all-closed', () => {
       if (process.platform !== 'darwin') {
@@ -139,10 +141,10 @@ class Browser {
 
     app.on('web-contents-created', this.onWebContentsCreated.bind(this))
     //app.on("ready", () => {
-      //globalShortcut.register("CommandOrControl+W", () => {
-        //const win = this.getWindowFromWebContents(webContents)
-        //win.tabs.remove()
-      //});
+    //globalShortcut.register("CommandOrControl+W", () => {
+    //const win = this.getWindowFromWebContents(webContents)
+    //win.tabs.remove()
+    //});
     //});
   }
 
@@ -209,7 +211,6 @@ class Browser {
         const win = this.createWindow({
           initialUrl: details.url || newTabUrl,
         })
-        // if (details.active) tabs.select(tab.id)
         return win.window
       },
       removeWindow: (browserWindow) => {
@@ -229,10 +230,22 @@ class Browser {
 
     const installedExtensions = await loadExtensions(
       this.session,
-      path.join(__dirname, '../../../extensions')
+      path.join(__dirname, '../../../extensions'),
     )
 
-    this.createWindow({ initialUrl: newTabUrl })
+    // 🌟 Creamos la ventana principal
+    const mainWin = this.createWindow({ initialUrl: newTabUrl })
+
+    // 🌟 Auto-updater
+    autoUpdater.checkForUpdatesAndNotify()
+
+    autoUpdater.on('update-available', () => {
+      log.info('Update disponible, descargando...')
+    })
+
+    autoUpdater.on('update-downloaded', () => {
+      log.info('Update descargado, reinicia para instalar.')
+    })
   }
 
   initSession() {
@@ -274,8 +287,8 @@ class Browser {
     }
 
     if (process.env.SHELL_DEBUG) {
-      const gpuWindow = new BrowserWindow({ width: 1024, height: 768 });
-      gpuWindow.loadURL('chrome://gpu');
+      const gpuWindow = new BrowserWindow({ width: 1024, height: 768 })
+      gpuWindow.loadURL('chrome://gpu')
     }
 
     return win
@@ -284,7 +297,7 @@ class Browser {
   async onWebContentsCreated(event, webContents) {
     const type = webContents.getType()
     const url = webContents.getURL()
-    log.info(`'web-contents-created' event [ type: ${type} ]`);
+    log.info(`'web-contents-created' event [ type: ${type} ]`)
 
     if (process.env.SHELL_DEBUG && webContents.getType() === 'backgroundPage') {
       webContents.openDevTools({ mode: 'detach', activate: true })
@@ -303,8 +316,8 @@ class Browser {
             const win = this.getWindowFromWebContents(webContents)
             const tab = win.tabs.create()
             tab.loadURL(details.url)
-            const currentURL = (details.url)
-            console.log(` > Loaded URL: "${currentURL}"`);
+            const currentURL = details.url
+            console.log(` > Loaded URL: "${currentURL}"`)
           })
 
           return { action: 'deny' }
@@ -341,19 +354,19 @@ class Browser {
 // Enable experimental web features
 //app.commandLine.appendSwitch('enable-experimental-web-platform-features');
 // Including new Canvas2D APIs
-app.commandLine.appendSwitch('new-canvas-2d-api');
+app.commandLine.appendSwitch('new-canvas-2d-api')
 // These two allow easier local web development
 // Allow file:// URIs to read other file:// URIs
-app.commandLine.appendSwitch('allow-file-access-from-files');
+app.commandLine.appendSwitch('allow-file-access-from-files')
 // Enable local DOM to access all resources in a tree
-app.commandLine.appendSwitch('enable-local-file-accesses');
+app.commandLine.appendSwitch('enable-local-file-accesses')
 // Enable QUIC for faster handshakes
-app.commandLine.appendSwitch('enable-quic');
+app.commandLine.appendSwitch('enable-quic')
 // Enable inspecting ALL layers
-app.commandLine.appendSwitch('enable-ui-devtools');
+app.commandLine.appendSwitch('enable-ui-devtools')
 // Force enable GPU acceleration
-app.commandLine.appendSwitch('ignore-gpu-blocklist');
+app.commandLine.appendSwitch('ignore-gpu-blocklist')
 // Force enable GPU rasterization
-app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-gpu-rasterization')
 
 module.exports = Browser

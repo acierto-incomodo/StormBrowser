@@ -3,50 +3,76 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About App</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="./imgs/app_favicon_32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./imgs/app_favicon_16.png">
+    <title>Acerca de Storm Browser</title>
     <style>
-      * {
-        box-sizing: border-box;
-      }
       body {
-        font-size: 16px;
-        max-width: 42rem;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        font-family: 'Roboto';
+        background-color: #202124;
+        color: #e8eaed;
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
       }
-      code {
+      .container {
+        max-width: 600px;
+        background: #292a2d;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+      h1 {
+        margin-top: 0;
+        color: #8ab4f8;
+      }
+      .version {
+        color: #9aa0a6;
+        margin-bottom: 20px;
+      }
+      hr {
+        border: 0;
+        border-top: 1px solid #3c4043;
+        margin: 20px 0;
+      }
+      .credits {
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+      .credits strong {
+        color: #fff;
+      }
+      .studio {
+        color: #c58af9; /* Color distintivo para el estudio */
         font-weight: bold;
       }
-      .logo {
-        margin-top: -12px;
-        margin-bottom: -6px;
-      }
-      .logo:hover {
-        filter: drop-shadow(1px 1px 2px #11bbee);
+      .tech-details {
+        font-size: 0.85rem;
+        color: #9aa0a6;
+        margin-top: 30px;
       }
     </style>
   </head>
   <body>
-    <h1><u>About Electron Shell Browser</u>&nbsp;
-      <span><a href="./imgs/logo.png" target="_blank"><img title="Logo (Click Me!)" width="48px" height="48px" class="logo" src="./imgs/logo.png"></img></a></span>
-    </h1>
-    <p><code><a target="_blank" rel="noopener" href="https://github.com/samuelmaddock/electron-browser-shell#readme">electron-browser-shell</a></code> is a minimal, tabbed web browser with support for (some) Chromium extension APIs.</p>
-    <hr/>
-    <p>It is built on <a href="https://www.electronjs.org/" target="_blank" rel="noopener">Electron</a>, and utilizes two npm packages to achieve its functions. They are:<br/>
-    <ul>
-      <li>
-        <code><a href="https://github.com/samuelmaddock/electron-browser-shell/tree/master/packages/electron-chrome-context-menu#readme" target="_blank" rel="noopener">electron-chrome-context-menu</a></code> - a module that aims to painlessly recreate the Chromium native context menu, with (close to) feature parity with Chromium.
-      </li>
-      <br/>
-	  <li>
-        <code><a href="https://github.com/samuelmaddock/electron-browser-shell/tree/master/packages/electron-chrome-extensions#readme" target="_blank" rel="noopener">electron-chrome-extensions</a></code> - a library that aims to recreate some missing or incomplete Chromium extension APIs in Electron.
-      </li>
-    </ul>
-    Electron has partial support for a subset of <a href="https://developer.chrome.com/docs/extensions/reference/" target="_blank" rel="noopener">these APIs</a>, as per <a href="https://www.electronjs.org/docs/latest/api/extensions" target="_blank" rel="noopener">Here</a>, but usually not enough to meaningfully utilize popular extensions on the Chrome Web Store.<br/>
-    This app can be used standalone to test the progress of Electron Chrome Extensions, as a minimal browser for fun, or as a boilerplate to create your own Electron based browser.</p>
-    <hr/>
+    <div class="container">
+      <h1>Storm Browser</h1>
+      <div class="version">Versión 1.0.0 (Early Access)</div>
+      
+      <div class="credits">
+        <p>Este navegador ha sido diseñado y desarrollado por:</p>
+        <p><strong>Aitor Perez</strong></p>
+        <p class="studio">Dueño de StormGamesStudios</p>
+      </div>
+
+      <hr>
+
+      <p>Storm Browser está diseñado para ser rápido, ligero y personalizable.</p>
+
+      <div class="tech-details">
+        <p>Basado en Electron y Chromium.</p>
+        <p>Utiliza tecnologías de código abierto como <code>electron-browser-shell</code>.</p>
+      </div>
+    </div>
   </body>
 </html>

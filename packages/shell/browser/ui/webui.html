@@ -5,15 +5,19 @@
     <title>Electron Shell Browser</title>
     <style>
       :root {
-        /* https://colorhunt.co/palette/161920 */
-        --bg-color: #39375b;
-        --fg-color: #11bbee;
-        --text-color: #ececec;
-        --tab-color: #745c97;
-        --toolbar-control-color: #d597ce;
+        /* Chrome Dark Mode Palette */
+        --bg-color: #202124;
+        --fg-color: #8ab4f8;
+        --text-color: #e8eaed;
+        --text-secondary: #9aa0a6;
+        --tab-color: #323639;
+        --tab-hover: #292a2d;
+        --toolbar-control-color: #9aa0a6;
+        --omnibox-bg: #202124;
+        --hover-bg: rgba(255, 255, 255, 0.1);
 
         /* electron-chrome-extensions colors */
-        --browser-action-badge-outline: var(--tab-color);
+        --browser-action-badge-outline: var(--bg-color);
       }
       
       *, *:before, *:after {
@@ -22,7 +26,7 @@
       }
 
       html {
-        background: #ececec;
+        background: var(--bg-color);
         height: 100%;
         margin: 0;
         padding: 0;
@@ -44,16 +48,23 @@
 
       .topbar {
         background: var(--bg-color);
-        height: 2rem;
+        height: auto;
+        display: flex;
+        flex-direction: column;
       }
 
       /*----- TABS -----*/
 
       #tabstrip {
         width: 100%;
-        height: 2rem;
+        height: 40px;
         display: flex;
         flex-direction: row;
+        align-items: flex-end;
+        padding-top: 8px;
+        padding-right: 138px;
+        position: relative;
+        z-index: 1;
       }
 
       .tab-list {
@@ -66,32 +77,49 @@
       #createtab {
         background: transparent;
         border: none;
-        font-weight: bold;
-        font-family: 'Roboto';
+        color: var(--text-secondary);
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        margin: auto 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       #createtab:hover {
-        background: rgba(255,255,255,0.25);
+        background: var(--hover-bg);
+        color: var(--text-color);
       }
 
       #createtab:active {
-        background: rgba(255,255,255,0.33);
+        background: rgba(255,255,255,0.15);
       }
 
       .tab {
-        padding: 0.4rem 0.4rem;
+        padding: 0 10px;
         height: 100%;
         overflow: hidden;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
-        width: 12rem;
-        min-width: 1rem;
-        box-shadow: inset -2px 0px 2px 0px rgba(0,0,0,0.33);
+        width: 240px;
+        min-width: 0;
+        box-shadow: none;
+        border-radius: 8px 8px 0 0;
+        margin-right: 1px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        border-right: 1px solid transparent;
+      }
+
+      .tab:not([data-active]):hover {
+        background: var(--tab-hover);
       }
 
       .tab[data-active] {
         background: var(--tab-color);
+        color: var(--text-color);
       }
 
       .tab .favicon[src] {
@@ -106,7 +134,7 @@
         min-width: 0;
         text-overflow: ellipsis;
         overflow: hidden;
-        font-size: 0.850rem;
+        font-size: 12px;
         user-select: none;
       }
 
@@ -116,9 +144,9 @@
       }
 
       .tab .controls .control {
-        background: rgba(0,0,0,0.25);
+        background: transparent;
         border: none;
-        border-radius: 50%;
+        border-radius: 2px;
         padding: 0;
         margin-left: 0.2rem;
         width: 1rem;
@@ -126,6 +154,12 @@
         font-size: 0.7rem;
         vertical-align: middle;
         line-height: 0;
+        color: var(--text-secondary);
+      }
+
+      .tab .controls .control:hover {
+        background: var(--hover-bg);
+        color: var(--text-color);
       }
 
       .tab .controls .control:disabled {
@@ -133,7 +167,7 @@
       }
 
       .tab .controls .control:active {
-        background: rgba(0,0,0,0.33);
+        background: rgba(255,255,255,0.2);
       }
 
       .app-drag {
@@ -147,89 +181,114 @@
       .window-controls {
         display: flex;
         flex-direction: row;
-        flex: 0 0 auto;
+        /* flex: 0 0 auto; */
+        /* align-self: flex-start; */
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        -webkit-app-region: no-drag;
       }
 
       .window-controls .control {
-        width: 2.5rem;
+        width: 46px;
+        height: 100%;
         background: none;
         border: none;
-        color: #ececec;
+        color: var(--text-secondary);
+        font-family: "Segoe MDL2 Assets", "Segoe UI Symbol", sans-serif;
+        font-size: 10px;
       }
 
       .window-controls .control:hover {
-        background: rgba(255,255,255,0.25);
+        background: var(--hover-bg);
+        color: var(--text-color);
       }
 
       .window-controls .control:active {
-        background: rgba(255,255,255,0.33);
+        background: rgba(255,255,255,0.2);
+      }
+
+      .window-controls #close:hover {
+        background: #e81123;
+        color: white;
       }
 
       /*----- TOOLBAR -----*/
 
       .toolbar {
-        height: 1.875rem;
+        height: 44px;
         background-color: var(--tab-color);
         display: flex;
         align-items: center;
         padding: 0.2rem 0.5rem;
+        position: relative;
+        z-index: 2;
       }
 
       .toolbar .page-controls {
         margin-right: 0.5rem;
+        display: flex;
+        align-items: center;
       }
       
       .address-bar {
         flex: 1 0 auto;
         line-height: 0;
-        height: 100%;
+        height: 28px;
       }
 
       .address-bar input {
         width: 100%;
         height: 100%;
-        background: var(--bg-color);
+        background: var(--omnibox-bg);
         color: var(--text-color);
         border: none;
-        border-radius: 2rem;
+        border-radius: 14px;
         padding: 0 0.5rem;
-        padding-bottom: 0.1rem;
+        padding-left: 12px;
         outline: none;
+        font-size: 14px;
       }
 
-      .address-bar:active {
-        outline: 1px solid;
-        outline-color: var(--fg-color);
-        border-radius: 2rem;
+      .address-bar:active, .address-bar input:focus {
+        outline: 2px solid var(--fg-color);
+        outline-offset: -1px;
+        background: #202124;
       }
 
       .toolbar .control {
         background: none;
         border: none;
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
         padding: 0;
         line-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 2px;
       }
 
       .ui {
-        color: #ececec;
+        color: var(--text-secondary);
       }
 
       .ui:hover {
-        color: var(--fg-color);
+        color: var(--text-color);
+        background-color: var(--hover-bg);
       }
 
       .x:hover {
-        color: rgb(229, 28, 35);
       }
 
       .newtab:hover {
-        color: #ececec;
+        color: var(--text-color);
       }
 
       .ui:active {
-        filter: brightness(1.33);
+        background-color: rgba(255,255,255,0.15);
       }
 
       .audio:active {
@@ -256,8 +315,8 @@
         <button title="New Tab" id="createtab" class="ui newtab"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 24 18" fill-rule="evenodd"><path fill="currentColor" stroke-width="0px" stroke-linecap="round" shape-rendering="geometricPrecision" d="M 21 13 h -8 v 8 h -3 v -8 H 2 v -3 h 8 V 2 h 3 v 8 h 8 Z"/></svg></button>
         <div class="app-drag"></div>
         <div class="window-controls">
-          <button id="minimize" class="control ui" style="color: #ececec">🗕</button>
-          <button id="maximize" class="control ui" style="color: #ececec">🗖</button>
+          <button id="minimize" class="control ui">🗕</button>
+          <button id="maximize" class="control ui">🗖</button>
           <button id="close" class="control ui x">🗙</button>
         </div>
       </div>

@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "CardinalAI Web",
+  "version": "1.0.0",
+  "description": "Acceso rápido a CardinalAI Web",
+  "icons": {
+    "256": "icon.png"
+  },
+  "browser_action": {
+    "default_title": "CardinalAI",
+    "default_popup": "new-tab.html",
+    "default_icon": "icon.png"
+  },
+  "permissions": [
+    "tabs"
+  ]
+}

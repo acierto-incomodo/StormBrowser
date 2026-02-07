@@ -1,7 +1,7 @@
 const { EventEmitter } = require('events');
 const { BrowserView } = require('electron');
 
-const toolbarHeight = 62
+const toolbarHeight = 84
 
 class Tab {
   constructor(parentWindow) {
