@@ -17,7 +17,7 @@
     "extensions"
   ],
   "repository": "https://github.com/samuelmaddock/electron-browser-shell",
-  "author": "Samuel Maddock <sam@samuelmaddock.com>",
+  "author": "StormGamesStudios <meliodas.aitor@gmail.com>",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
     "debug": "^4.3.1"

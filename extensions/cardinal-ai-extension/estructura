@@ -2,5 +2,8 @@ StormBrowser/
  └─ extensions/
      └─ cardinal-ai-web/
          ├─ manifest.json
-         ├─ new-tab.html
+         ├─ cardinal-ai.html
+         ├─ background.html
+         ├─ background.js
+         ├─ estructura
          └─ icon.png

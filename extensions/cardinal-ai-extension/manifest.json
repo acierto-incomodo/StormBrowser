@@ -6,12 +6,29 @@
   "icons": {
     "256": "icon.png"
   },
+  "background": {
+    "scripts": ["background.js"]
+  },
   "browser_action": {
-    "default_title": "CardinalAI",
-    "default_popup": "new-tab.html",
-    "default_icon": "icon.png"
+    "default_icon": {
+      "256": "icon.png"
+    },
+    "default_title": "CardinalAI Web"
+  },
+  "options_ui": {
+    "open_in_tab": true,
+    "page": "cardinal-ai.html"
   },
   "permissions": [
-    "tabs"
+    "alarms",
+    "contextMenus",
+    "privacy",
+    "storage",
+    "tabs",
+    "unlimitedStorage",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
   ]
 }

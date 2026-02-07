@@ -1,7 +1,7 @@
 {
   "name": "shell",
-  "productName": "Electron Shell Browser",
-  "version": "1.0.1",
+  "productName": "StormBrowser",
+  "version": "1.0.0",
   "description": "Minimum Viable Browser shell built on Electron.",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "test": "npm run build"
   },
   "license": "GPL-3.0",
-  "author": "Samuel Maddock <sam@samuelmaddock.com>",
+  "author": "StormGamesStudios <meliodas.aitor@gmail.com>",
   "homepage": "https://github.com/samuelmaddock/electron-browser-shell/tree/master/packages/shell",
   "private": true,
   "dependencies": {
@@ -35,6 +35,7 @@
   "build": {
     "appId": "com.electron.shell-browser",
     "productName": "StormBrowser",
+    "icon": "icon.png",
     "publish": [
       {
         "provider": "github",
@@ -72,17 +73,17 @@
         "zip",
         "deb"
       ],
-      "maintainer": "Samuel Maddock",
-      "vendor": "Alex313031",
+      "maintainer": "StormGamesStudios",
+      "vendor": "StormGamesStudios",
       "synopsis": "Minimum Viable Browser shell built on Electron.",
       "category": "Network;Browser;",
-      "executableName": "electron-shell",
-      "artifactName": "electron-shell_${version}_${arch}.${ext}",
+      "executableName": "stormbrowser",
+      "artifactName": "stormbrowser_${version}_${arch}.${ext}",
       "desktop": {
-        "Name": "Electron Shell Browser",
-        "StartupWMClass": "electron-shell",
+        "Name": "StormBrowser",
+        "StartupWMClass": "stormbrowser",
         "Keywords": "electron;webview;browser;extensions;",
-        "Icon": "electron-shell"
+        "Icon": "stormbrowser"
       }
     },
     "win": {
@@ -90,15 +91,15 @@
         "zip",
         "nsis"
       ],
-      "publisherName": "Alex313031",
-      "executableName": "electron_shell",
-      "artifactName": "Electron_Shell_${version}_${arch}.${ext}"
+      "publisherName": "StormGamesStudios",
+      "executableName": "stormbrowser",
+      "artifactName": "StormBrowser_${version}_${arch}.${ext}"
     },
     "nsis": {
-      "shortcutName": "Electron Shell Browser",
-      "artifactName": "Electron_Shell_${version}_${arch}.${ext}",
+      "shortcutName": "StormBrowser",
+      "artifactName": "StormBrowser_${version}_${arch}.${ext}",
       "deleteAppDataOnUninstall": false,
-      "uninstallDisplayName": "Electron Shell ${version}"
+      "uninstallDisplayName": "StormBrowser ${version}"
     }
   }
 }

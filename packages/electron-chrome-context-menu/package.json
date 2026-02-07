@@ -16,7 +16,7 @@
     "menu"
   ],
   "repository": "https://github.com/samuelmaddock/electron-browser-shell",
-  "author": "Samuel Maddock <sam@samuelmaddock.com>",
+  "author": "StormGamesStudios <meliodas.aitor@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
     "electron": ">=9.0.0"

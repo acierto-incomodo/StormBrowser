@@ -138,7 +138,7 @@ class WebUI {
   }
 
   goHome() {
-    const url = 'https://www.google.com/'
+    const url = path.join('chrome-extension://', webuiExtensionId, 'new-tab.html')
     chrome.tabs.update({ url })
   }
 
