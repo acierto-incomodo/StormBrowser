@@ -242,11 +242,13 @@ class Browser {
     const mainWin = this.createWindow({ initialUrl: newTabUrl })
 
     // =======================
-    // Auto Updater (Windows)
+    // Auto Updater (Windows - Open Source)
     // =======================
 
     autoUpdater.autoDownload = true
-    autoUpdater.autoInstallOnAppQuit = true
+    autoUpdater.autoInstallOnAppQuit = false
+    autoUpdater.disableWebInstaller = true
+    autoUpdater.forceDevUpdateConfig = true
 
     autoUpdater.on('checking-for-update', () => {
       log.info('Buscando actualizaciones...')
@@ -271,10 +273,13 @@ class Browser {
     })
 
     autoUpdater.on('update-downloaded', () => {
-      log.info('Update descargado, se instalará al cerrar la app')
+      log.info('Update descargado, instalando ahora...')
+      setTimeout(() => {
+        autoUpdater.quitAndInstall(false, true)
+      }, 1000)
     })
 
-    // ⏱️ delay corto para asegurar que todo está listo
+    // ⏱️ delay corto para asegurar que Electron está listo
     setTimeout(() => {
       autoUpdater.checkForUpdates()
     }, 3000)

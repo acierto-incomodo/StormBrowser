@@ -1,5 +1,5 @@
-const { EventEmitter } = require('events');
-const { BrowserView } = require('electron');
+const { EventEmitter } = require('events')
+const { BrowserView } = require('electron')
 
 const toolbarHeight = 84
 

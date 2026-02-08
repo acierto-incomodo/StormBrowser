@@ -1,11 +1,11 @@
-const { Menu, BrowserWindow } = require('electron');
+const { Menu, BrowserWindow } = require('electron')
 
 const setupMenu = (browser) => {
   const isMac = process.platform === 'darwin'
 
   const tab = () => browser.getFocusedWindow().getFocusedTab()
   const tabWc = () => tab().webContents
-  const gpuWindow = () => new BrowserWindow({ width: 1024, height: 768 });
+  const gpuWindow = () => new BrowserWindow({ width: 1024, height: 768 })
 
   const template = [
     ...(isMac ? [{ role: 'appMenu' }] : []),

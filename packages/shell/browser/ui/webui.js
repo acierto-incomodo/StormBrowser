@@ -33,12 +33,12 @@ class WebUI {
     this.$.minimizeButton.addEventListener('click', () =>
       chrome.windows.get(chrome.windows.WINDOW_ID_CURRENT, (win) => {
         chrome.windows.update(win.id, { state: win.state === 'minimized' ? 'normal' : 'minimized' })
-      })
+      }),
     )
     this.$.maximizeButton.addEventListener('click', () =>
       chrome.windows.get(chrome.windows.WINDOW_ID_CURRENT, (win) => {
         chrome.windows.update(win.id, { state: win.state === 'maximized' ? 'normal' : 'maximized' })
-      })
+      }),
     )
     this.$.closeButton.addEventListener('click', () => chrome.windows.remove())
 
@@ -114,7 +114,7 @@ class WebUI {
 
     for (const tab of this.tabList) {
       if (tab.id === this.activeTabId) {
-        tab.active = true;
+        tab.active = true
         this.renderTab(tab)
         this.renderToolbar(tab)
       } else {
@@ -182,7 +182,7 @@ class WebUI {
   }
 
   renderTabs() {
-    this.tabList.forEach(tab => {
+    this.tabList.forEach((tab) => {
       this.renderTab(tab)
     })
   }
