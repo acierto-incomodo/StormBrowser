@@ -9,6 +9,9 @@ const { buildChromeContextMenu } = require('electron-chrome-context-menu')
 
 const { autoUpdater } = require('electron-updater')
 
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+
 let webuiExtensionId
 
 const manifestExists = async (dirPath) => {
@@ -130,6 +133,8 @@ class Browser {
   windows = []
 
   constructor() {
+    app.setAppUserModelId('com.electron.shell-browser')
+
     app.whenReady().then(this.init.bind(this))
     console.log(`\nElectron Shell Browser is up!\n`)
 
@@ -236,16 +241,43 @@ class Browser {
     // 🌟 Creamos la ventana principal
     const mainWin = this.createWindow({ initialUrl: newTabUrl })
 
-    // 🌟 Auto-updater
-    autoUpdater.checkForUpdatesAndNotify()
+    // =======================
+    // Auto Updater (Windows)
+    // =======================
 
-    autoUpdater.on('update-available', () => {
-      log.info('Update disponible, descargando...')
+    autoUpdater.autoDownload = true
+    autoUpdater.autoInstallOnAppQuit = true
+
+    autoUpdater.on('checking-for-update', () => {
+      log.info('Buscando actualizaciones...')
+    })
+
+    autoUpdater.on('update-available', (info) => {
+      log.info('Actualización disponible:', info.version)
+    })
+
+    autoUpdater.on('update-not-available', () => {
+      log.info('No hay actualizaciones')
+    })
+
+    autoUpdater.on('error', (err) => {
+      log.error('Error en autoUpdater:', err)
+    })
+
+    autoUpdater.on('download-progress', (progress) => {
+      log.info(
+        `Descargando update: ${Math.round(progress.percent)}% (${progress.transferred}/${progress.total})`,
+      )
     })
 
     autoUpdater.on('update-downloaded', () => {
-      log.info('Update descargado, reinicia para instalar.')
+      log.info('Update descargado, se instalará al cerrar la app')
     })
+
+    // ⏱️ delay corto para asegurar que todo está listo
+    setTimeout(() => {
+      autoUpdater.checkForUpdates()
+    }, 3000)
   }
 
   initSession() {
