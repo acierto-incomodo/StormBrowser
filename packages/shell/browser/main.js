@@ -12,6 +12,37 @@ const { autoUpdater } = require('electron-updater')
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
 
+
+// =====================================
+// CONFIGURACIÓN DE ACTUALIZACIONES
+// =====================================
+autoUpdater.checkForUpdates();
+
+autoUpdater.on("update-available", (info) => {
+  updateInfo = info;
+  if (mainWindow) {
+    mainWindow.webContents.send("update-available", info);
+  }
+});
+
+autoUpdater.on("update-not-available", () => {
+  if (mainWindow) {
+    mainWindow.webContents.send("update-not-available");
+  }
+});
+
+autoUpdater.on("update-downloaded", () => {
+  autoUpdater.quitAndInstall(false, true);
+});
+
+autoUpdater.on("error", (err) => {
+  console.error("Error en autoUpdater:", err);
+  if (mainWindow) {
+    mainWindow.webContents.send("update-error", err.message);
+  }
+});
+
+
 let webuiExtensionId
 
 const manifestExists = async (dirPath) => {
@@ -240,49 +271,6 @@ class Browser {
 
     // 🌟 Creamos la ventana principal
     const mainWin = this.createWindow({ initialUrl: newTabUrl })
-
-    // =======================
-    // Auto Updater (Windows - Open Source)
-    // =======================
-
-    autoUpdater.autoDownload = true
-    autoUpdater.autoInstallOnAppQuit = false
-    autoUpdater.disableWebInstaller = true
-    autoUpdater.forceDevUpdateConfig = true
-
-    autoUpdater.on('checking-for-update', () => {
-      log.info('Buscando actualizaciones...')
-    })
-
-    autoUpdater.on('update-available', (info) => {
-      log.info('Actualización disponible:', info.version)
-    })
-
-    autoUpdater.on('update-not-available', () => {
-      log.info('No hay actualizaciones')
-    })
-
-    autoUpdater.on('error', (err) => {
-      log.error('Error en autoUpdater:', err)
-    })
-
-    autoUpdater.on('download-progress', (progress) => {
-      log.info(
-        `Descargando update: ${Math.round(progress.percent)}% (${progress.transferred}/${progress.total})`,
-      )
-    })
-
-    autoUpdater.on('update-downloaded', () => {
-      log.info('Update descargado, instalando ahora...')
-      setTimeout(() => {
-        autoUpdater.quitAndInstall(false, true)
-      }, 1000)
-    })
-
-    // ⏱️ delay corto para asegurar que Electron está listo
-    setTimeout(() => {
-      autoUpdater.checkForUpdates()
-    }, 3000)
   }
 
   initSession() {
@@ -387,6 +375,45 @@ class Browser {
     })
   }
 }
+
+
+
+// =====================================
+// MANEJO DE ACTUALIZACIONES
+// =====================================
+ipcMain.handle("check-for-updates", async () => {
+  try {
+    const result = await autoUpdater.checkForUpdates();
+    return result;
+  } catch (err) {
+    console.error("Error checking for updates:", err);
+    throw err;
+  }
+});
+
+ipcMain.handle("get-update-info", () => {
+  return updateInfo;
+});
+
+ipcMain.handle("download-update", async () => {
+  try {
+    await autoUpdater.downloadUpdate();
+    return true;
+  } catch (err) {
+    console.error("Error downloading update:", err);
+    throw err;
+  }
+});
+
+ipcMain.handle("install-update", () => {
+  autoUpdater.quitAndInstall();
+});
+
+// =====================================
+// FIN MANEJO DE ACTUALIZACIONES
+// =====================================
+
+
 
 // Enable experimental web features
 //app.commandLine.appendSwitch('enable-experimental-web-platform-features');
